@@ -26,7 +26,7 @@ serve({
       "content-type": "text-html; charset=UTF-8"
     },
   }),
-  "blog/:id": (request, {slug}) => {
+  "/blog/:id": (request, {slug}) => {
     const post = blogPage(slug);
     return new Response(post, {headers: {
       "content-type": "text-html; charset=UTF-8"
