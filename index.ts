@@ -1,7 +1,36 @@
-addEventListener('fetch', (event) => {
-  event.respondWith(new Response(JSON.stringify({
-    message: "hogefuga",
-  }, null, 2), {
-    headers: { "content-type": "application/json; charset=UTF-8" },
-  }))
+import { serve } from "https://deno.land/x/sift/mod.ts";
+
+const index = `<html>
+  <head>
+    <title>index page</title>
+  </head>
+  <body>
+    <h1>This is top page</h1>
+  </body>
+</html>`;
+
+function blogPage(slug: string) {
+  return `<html>
+  <head>
+    <title>blog page</title>
+  </head>
+  <body>
+    <h1>Hello ${slug}</h1>
+  </body>
+</html>`;
+}
+
+serve({
+  "/": ()=> new Response(index, {
+    headers: {
+      "content-type": "text-html; charset=UTF-8"
+    },
+  }),
+  "blog/:id": (request, {slug}) => {
+    const post = blogPage(slug);
+    return new Response(post, {headers: {
+      "content-type": "text-html; charset=UTF-8"
+    }})
+  },
+  404: () => new Response("not found"),
 });
