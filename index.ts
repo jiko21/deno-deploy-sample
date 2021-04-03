@@ -14,7 +14,7 @@ const index = `<html>
 
 
 async function getBlogData(date: string) {
-  const response = await fetch(`https://raw.githubusercontent.com/jiko21/deno-deploy-sample/main/posts/${data}.md`, {
+  const response = await fetch(`https://raw.githubusercontent.com/jiko21/deno-deploy-sample/main/posts/${date}.md`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json"
