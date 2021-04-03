@@ -1,10 +1,7 @@
 import { serve } from "https://deno.land/x/sift/mod.ts";
 import flavMd from 'https://cdn.skypack.dev/flav-md';
 
-const result = flavMd.createFlavMd()
-  .readMdText('# hogehoge')
-  .readCssText('.flav-md-h1 {color: red;}')
-  .build();
+
 
 const index = `<html>
   <head>
@@ -15,7 +12,23 @@ const index = `<html>
   </body>
 </html>`;
 
-function blogPage(slug: string) {
+
+async function getBlogData() {
+  const response = await fetch('https://raw.githubusercontent.com/jiko21/deno-deploy-sample/main/posts/2021-04-03.md', {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json"
+    },
+  });
+  return response.text();
+}
+
+async function blogPage(slug: string) {
+  const md = await getBlogData();
+  const result = flavMd.createFlavMd()
+  .readMdText(md)
+  .readCssText('.flav-md-h1 {color: red;}')
+  .build();
   return `<html>
   <head>
     <title>blog page</title>
@@ -33,8 +46,8 @@ serve({
       "content-type": "text-html; charset=UTF-8"
     },
   }),
-  "/blog/:slug": (request, {slug}) => {
-    const post = blogPage(slug);
+  "/blog/:slug": async (request, {slug}) => {
+    const post = await blogPage(slug);
     return new Response(post, {headers: {
       "content-type": "text-html; charset=UTF-8"
     }})
