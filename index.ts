@@ -1,4 +1,10 @@
 import { serve } from "https://deno.land/x/sift/mod.ts";
+import flavMd from 'https://cdn.skypack.dev/flav-md';
+
+const result = flavMd.createFlavMd()
+  .readMdText('# hogehoge')
+  .readCssText('.flav-md-h1 {color: red;}')
+  .build();
 
 const index = `<html>
   <head>
@@ -16,6 +22,7 @@ function blogPage(slug: string) {
   </head>
   <body>
     <h1>Hello ${slug}</h1>
+    ${result}
   </body>
 </html>`;
 }
